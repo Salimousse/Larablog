@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PublicController;
 use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
@@ -21,3 +22,6 @@ Route::middleware('auth')->group(function () {
     Route::delete('/articles/{article}', [UserController::class, 'remove'])->name('articles.remove');});
 
 require __DIR__.'/auth.php';
+
+Route::get('/{user}', [PublicController::class, 'index'])->name('public.index');
+Route::get('/{user}/{article}', [PublicController::class, 'show'])->name('public.show');

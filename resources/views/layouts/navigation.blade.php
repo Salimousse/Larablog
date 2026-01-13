@@ -16,10 +16,15 @@
                         {{ __('Dashboard') }}
                     </x-nav-link>
                     <x-nav-link :href="route('articles.create')" :active="request()->routeIs('articles.create')">
-    Créer un article
+                        Créer un article
+                    </x-nav-link>
+                    <x-nav-link :href="route('public.index', ['user' => Auth::user()->id])" :active="request()->routeIs('public.index')">
+                        Voir le blog
                     </x-nav-link>
                 </div>
-</div>
+            </div>
+
+                
             <!-- Settings Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ms-6">
                 <x-dropdown align="right" width="48">
