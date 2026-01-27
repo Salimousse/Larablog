@@ -66,7 +66,8 @@ public function edit(Article $article)
 
     // On retourne la vue avec l'article
     return view('articles.edit', [
-        'article' => $article
+        'article' => $article,
+        'categories' => Category::all()
     ]);
 }
 
@@ -80,13 +81,19 @@ public function update(Request $request, Article $article)
   
 
     // On récupère les données du formulaire
+
     $data = $request->only(['title', 'content', 'draft']);
 
     // Gestion du draft
     $data['draft'] = isset($data['draft']) ? 1 : 0;
 
     // On met à jour l'article
+
     $article->update($data);
+    // Synchroniser les catégories sélectionnées
+    if ($request->has('categories')) {
+        $article->categories()->sync($request->input('categories'));
+    }
 
     
 
@@ -112,4 +119,14 @@ public function remove(Article $article)
     return redirect()->route('dashboard')->with('success', 'Article supprimé !');
 }
 
+public function like(Article $article)
+{
+    // On incrémente le nombre de likes
+    $article->likes = $article->likes + 1;
+    $article->save();
+
+    // On redirige l'utilisateur vers la page précédente
+    return redirect()->back();
+
+}
 }

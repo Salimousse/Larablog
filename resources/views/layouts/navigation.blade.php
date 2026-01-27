@@ -19,7 +19,7 @@
                         Créer un article
                     </x-nav-link>
                     <x-nav-link :href="route('public.index', ['user' => Auth::user()->id])" :active="request()->routeIs('public.index')">
-                        Voir le blog
+                        Voir mon blog
                     </x-nav-link>
                 </div>
             </div>

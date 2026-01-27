@@ -6,8 +6,12 @@ use App\Http\Controllers\PublicController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ProfileController;
 
+use App\Models\Article;
+use App\Models\User;
+
 Route::get('/', function () {
-    return view('welcome');
+    $articles = Article::where('draft', 0)->with(['user', 'tags'])->latest()->get();
+    return view('welcome', compact('articles'));
 });
 
 Route::get('/dashboard', [UserController::class, 'index'])->name('dashboard')->middleware(['auth', 'verified']);
@@ -22,7 +26,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/articles/{article}/update', [UserController::class, 'update'])->name('articles.update');
     Route::delete('/articles/{article}', [UserController::class, 'remove'])->name('articles.remove');});
     Route::post('/comments/store', [CommentController::class, 'store'])->name('comments.store');
-    Route::post('/articles/{article}/like', [PublicController::class, 'like'])->name('articles.like');
+    Route::get('/article/like/{article}', [UserController::class, 'like'])->name('article.like');
+
 
 require __DIR__.'/auth.php';
 

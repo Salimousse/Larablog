@@ -34,9 +34,18 @@ public function show(User $user, Article $article)
     ]);
 
 
+ 
+
+
+}
+
+   public function home()
+{
+    return view('welcome');
+
+
 
     
 }
-
 
 }

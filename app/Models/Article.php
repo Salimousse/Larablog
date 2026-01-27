@@ -18,6 +18,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $title
  * @property string $content
  * @property bool|null $draft
+ * @property int|null $likes
  * @property Carbon $created_at
  * @property Carbon $updated_at
  * 
@@ -36,14 +37,16 @@ class Article extends Model
 
 	protected $casts = [
 		'user_id' => 'int',
-		'draft' => 'bool'
+		'draft' => 'bool',
+		'likes' => 'int'
 	];
 
 	protected $fillable = [
 		'user_id',
 		'title',
 		'content',
-		'draft'
+		'draft',
+		'likes'
 	];
 
 	

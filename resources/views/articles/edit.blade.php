@@ -21,9 +21,22 @@
                    <input type="text" value="{{ $article->title }}" name="title" id="title" placeholder="Titre de l'article" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                 </div>
 
+
                 <div class="p-6 pt-0 text-gray-900">
                    <!-- Contenu de l'article -->
                    <textarea rows="30" name="content" id="content" placeholder="Contenu de l'article" class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">{{ $article->content }}</textarea>
+                </div>
+
+                <div class="border-t border-gray-200">
+                    <!-- choix catégorie -->
+                    <div class="p-6 text-gray-900 ">
+                        <label for="categories" class="block text-sm font-medium text-gray-700">Catégories :</label>
+                        <select name="categories[]" id="categories" multiple class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}" {{ $article->categories->contains($category->id) ? 'selected' : '' }}>{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
                 </div>
 
                 <div class="p-6 text-gray-900 flex items-center">
