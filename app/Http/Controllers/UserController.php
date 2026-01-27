@@ -22,7 +22,7 @@ class UserController extends Controller
 public function store(Request $request)
 {
     // On récupère les données du formulaire
-    $data = $request->only(['title', 'content', 'draft', 'category_id']);
+    $data = $request->only(['title', 'content', 'draft', 'category_id', 'tags']);
 
     // Créateur de l'article (auteur)
     $data['user_id'] = Auth::user()->id;
@@ -35,6 +35,7 @@ public function store(Request $request)
     $article = Article::create($data);
     // $article est l'article sauvé en base de données (resultat de la méthode create ou d'un update)
     // Exemple pour ajouter des catégories à l'article en venant du formulaire
+    $article->tags ()->sync($request->input('tags'));
     $article->categories()->sync($request->input('categories'));
 
    

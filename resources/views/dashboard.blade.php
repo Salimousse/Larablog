@@ -58,6 +58,13 @@
                     <span class="inline-block bg-gray-200 text-gray-800 text-xs px-2 py-1 rounded mr-1">{{ $category->name }}</span>
                     @endforeach
                 </div>
+                 <div class="mt-2">
+                    @foreach($article->tags as $tag)
+                    <span class="inline-block bg-blue-200 text-blue-800 text-xs px-2 py-1 rounded mr-1">#{{ $tag->name }}</span>
+                    @endforeach
+                </div>
+
+               
             </div>
 
             <div class="flex justify-end space-x-4 p-4">
