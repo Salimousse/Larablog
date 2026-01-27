@@ -9,10 +9,7 @@ use App\Http\Controllers\ProfileController;
 use App\Models\Article;
 use App\Models\User;
 
-Route::get('/', function () {
-    $articles = Article::where('draft', 0)->with(['user', 'tags'])->latest()->get();
-    return view('welcome', compact('articles'));
-});
+Route::get('/', [PublicController::class, 'home'])->name('home');
 
 Route::get('/dashboard', [UserController::class, 'index'])->name('dashboard')->middleware(['auth', 'verified']);
 

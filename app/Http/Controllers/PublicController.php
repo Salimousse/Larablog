@@ -39,13 +39,11 @@ public function show(User $user, Article $article)
 
 }
 
-   public function home()
+
+public function home()
 {
-    return view('welcome');
-
-
-
-    
+    $articles = \App\Models\Article::orderBy('likes', 'desc')->take(5)->get();
+    return view('public.home', compact('articles'));
 }
 
 }

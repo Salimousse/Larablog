@@ -15,12 +15,20 @@
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
     <body class="font-sans text-gray-900 antialiased bg-gray-100 dark:bg-gray-900 min-h-screen flex flex-col">
+
         <!-- Header -->
         <header class="bg-white dark:bg-gray-800 shadow py-4 px-6 flex items-center justify-between">
-            <a href="/">
-                <x-application-logo class="w-16 h-16 fill-current text-gray-500" />
-            </a>
-            <span class="text-xl font-semibold text-gray-700 dark:text-gray-200">{{ config('app.name', 'Laravel') }}</span>
+            @auth
+                @include('layouts.navigation')
+            @endauth
+
+            @guest
+                @if (Route::has('login'))
+                    <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
+                        <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Login</a>
+                    </div>
+                @endif
+            @endguest
         </header>
 
         <!-- Main Content -->
