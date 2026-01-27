@@ -5,6 +5,13 @@
         </h2>
     </x-slot>
 
+    <div class="mb-4">
+    <a href="{{ route('dashboard') }}" class="text-gray-600 hover:text-gray-900">
+        &larr; Retour au tableau de bord
+    </a>
+</div>
+
+
     <form method="post" action="{{ route('articles.update', $article->id) }}" class="py-12">
         @csrf
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">

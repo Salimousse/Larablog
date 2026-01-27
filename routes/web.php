@@ -22,6 +22,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/articles/{article}/update', [UserController::class, 'update'])->name('articles.update');
     Route::delete('/articles/{article}', [UserController::class, 'remove'])->name('articles.remove');});
     Route::post('/comments/store', [CommentController::class, 'store'])->name('comments.store');
+    Route::post('/articles/{article}/like', [PublicController::class, 'like'])->name('articles.like');
 
 require __DIR__.'/auth.php';
 

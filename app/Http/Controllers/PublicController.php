@@ -37,4 +37,6 @@ public function show(User $user, Article $article)
 
     
 }
+
+
 }

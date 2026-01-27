@@ -5,6 +5,13 @@
         </h2>
     </div>
 
+
+    <div class="mb-4">
+    <a href="{{ route('dashboard') }}" class="text-gray-600 hover:text-gray-900">
+        &larr; Retour au tableau de bord
+    </a>
+</div>
+
     <div>
         <!-- Articles -->
         @foreach ($articles as $article)

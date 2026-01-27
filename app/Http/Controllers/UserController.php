@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -10,13 +11,18 @@ class UserController extends Controller
 {
     public function create()
 {
-    return view('articles.create');
+    return view('articles.create') ->with('categories', Category::all());
+
+    
+    
+
+
 }
 
 public function store(Request $request)
 {
     // On récupère les données du formulaire
-    $data = $request->only(['title', 'content', 'draft']);
+    $data = $request->only(['title', 'content', 'draft', 'category_id']);
 
     // Créateur de l'article (auteur)
     $data['user_id'] = Auth::user()->id;
@@ -25,7 +31,16 @@ public function store(Request $request)
     $data['draft'] = isset($data['draft']) ? 1 : 0;
 
     // On crée l'article
+
     $article = Article::create($data);
+    // $article est l'article sauvé en base de données (resultat de la méthode create ou d'un update)
+    // Exemple pour ajouter des catégories à l'article en venant du formulaire
+    $article->categories()->sync($request->input('categories'));
+
+   
+   
+    
+    
      
     return redirect()->route('dashboard');
 }
@@ -35,7 +50,7 @@ public function index()
     // On récupère l'utilisateur connecté.
     $user = Auth::user();
 
-    $articles = Article::where('user_id', $user->id)->get();
+    $articles = Article::where('user_id', $user->id)->with(['categories'])->get();
 
     // On retourne la vue.
     return view('dashboard', ['articles' => $articles]);
@@ -62,6 +77,8 @@ public function update(Request $request, Article $article)
         abort(403);
     }
 
+  
+
     // On récupère les données du formulaire
     $data = $request->only(['title', 'content', 'draft']);
 
@@ -70,6 +87,9 @@ public function update(Request $request, Article $article)
 
     // On met à jour l'article
     $article->update($data);
+
+    
+
 
     // On redirige l'utilisateur vers la liste des articles (avec un flash)
     return redirect()->route('dashboard')->with('success', 'Article mis à jour !');

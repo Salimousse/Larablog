@@ -15,6 +15,8 @@
         </div>
     </div>
 
+    
+
     <!-- Message flash -->
 @if (session('success'))
 <div class="bg-green-500 text-white p-4 rounded-lg mt-6 mb-6 text-center">
@@ -37,9 +39,17 @@
 @foreach ($articles as $article)
     <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-4">
         <div class="p-6 text-gray-900">
-            <h2 class="text-2xl font-bold">{{ $article->title }}</h2>
-            <p class="text-gray-700">{{ substr($article->content, 0, 30) }}...</p>
+            <a href="{{ route('public.show', ['user' => $article->user_id, 'article' => $article->id]) }}" class="block hover:underline">
+                <h2 class="text-2xl font-bold">{{ $article->title }}</h2>
+                <p class="text-gray-700">{{ substr($article->content, 0, 30) }}...</p>
+            </a>
+            <div class="mt-2">
+                @foreach($article->categories as $category)
+                    <span class="inline-block bg-gray-200 text-gray-800 text-xs px-2 py-1 rounded mr-1">{{ $category->name }}</span>
+                @endforeach
+            </div>
         </div>
+      
         <div class="flex justify-end space-x-4 p-4">
             <a href="{{ route('articles.edit', $article->id) }}" class="text-blue-500 hover:text-blue-700">Modifier</a>
             <form method="POST" action="{{ route('articles.remove', $article->id) }}">
