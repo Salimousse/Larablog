@@ -45,14 +45,22 @@ public function store(Request $request)
     return redirect()->route('dashboard');
 }
 
-public function index()
+public function index(Request $request)
 {
-    // On récupère l'utilisateur connecté.
     $user = Auth::user();
+    $query = Article::where('user_id', $user->id)->with(['categories']);
 
-    $articles = Article::where('user_id', $user->id)->with(['categories'])->get();
+    if ($request->filled('search')) {
+        $query->where('title', 'like', '%' . $request->search . '%');
+    }
+    if ($request->filled('category')) {
+        $query->whereHas('categories', function($q) use ($request) {
+            $q->where('categories.id', $request->category);
+        });
+    }
 
-    // On retourne la vue.
+    $articles = $query->paginate(5);
+
     return view('dashboard', ['articles' => $articles]);
 }
 

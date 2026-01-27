@@ -15,57 +15,65 @@
         </div>
     </div>
 
-    
-
     <!-- Message flash -->
-@if (session('success'))
-<div class="bg-green-500 text-white p-4 rounded-lg mt-6 mb-6 text-center">
-    {{ session('success') }}
-</div>
-@endif
+    @if (session('success'))
+    <div class="bg-green-500 text-white p-4 rounded-lg mt-6 mb-6 text-center">
+        {{ session('success') }}
+    </div>
+    @endif
 
+    @if (session('error'))
+    <div class="bg-red-500 text-white p-4 rounded-lg mt-6 mb-6 text-center">
+        {{ session('error') }}
+    </div>
+    @endif
 
-
-@if (session('error'))
-<div class="bg-red-500 text-white p-4 rounded-lg mt-6 mb-6 text-center">
-    {{ session('error') }}
-</div>
-@endif
-
-
+    <!-- Formulaire de filtre centré -->
+    <div class="max-w-2xl mx-auto mb-8">
+        <form method="GET" action="{{ route('dashboard') }}" class="flex flex-col sm:flex-row items-center justify-center space-y-2 sm:space-y-0 sm:space-x-4">
+            <input type="text" name="search" value="{{ request('search') }}" placeholder="Rechercher un titre..." class="rounded border-gray-300 px-3 py-2 w-full sm:w-64">
+            <select name="category" class="rounded border-gray-300 px-3 py-2 w-full sm:w-48">
+                <option value="">Toutes les catégories</option>
+                @foreach(\App\Models\Category::all() as $cat)
+                    <option value="{{ $cat->id }}" {{ request('category') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
+                @endforeach
+            </select>
+            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded w-full sm:w-auto">Filtrer</button>
+        </form>
+    </div>
 
     <!-- Articles -->
-<div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-@foreach ($articles as $article)
-    <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-4">
-        <div class="p-6 text-gray-900">
-            <a href="{{ route('public.show', ['user' => $article->user_id, 'article' => $article->id]) }}" class="block hover:underline">
-                <h2 class="text-2xl font-bold">{{ $article->title }}</h2>
-                <p class="text-gray-700">{{ substr($article->content, 0, 30) }}...</p>
-            </a>
-            <div class="mt-2">
-                @foreach($article->categories as $category)
+    
+
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        @foreach ($articles as $article)
+        <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg mt-4">
+            <div class="p-6 text-gray-900">
+                <a href="{{ route('public.show', ['user' => $article->user_id, 'article' => $article->id]) }}" class="block hover:underline">
+                    <h2 class="text-2xl font-bold text-white dark:text-gray-900">{{ $article->title }}</h2>
+                    <p class="text-gray-700">{{ substr($article->content, 0, 30) }}...</p>
+                </a>
+                <div class="mt-2">
+                    @foreach($article->categories as $category)
                     <span class="inline-block bg-gray-200 text-gray-800 text-xs px-2 py-1 rounded mr-1">{{ $category->name }}</span>
-                @endforeach
+                    @endforeach
+                </div>
+            </div>
+
+            <div class="flex justify-end space-x-4 p-4">
+                <a href="{{ route('articles.edit', $article->id) }}" class="text-blue-500 hover:text-blue-700">Modifier</a>
+                <form method="POST" action="{{ route('articles.remove', $article->id) }}">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="text-red-500 hover:text-red-700">Supprimer</button>
+                </form>
             </div>
         </div>
-      
-        <div class="flex justify-end space-x-4 p-4">
-            <a href="{{ route('articles.edit', $article->id) }}" class="text-blue-500 hover:text-blue-700">Modifier</a>
-            <form method="POST" action="{{ route('articles.remove', $article->id) }}">
-                @csrf
-                @method('DELETE')
-                <button type="submit" class="text-red-500 hover:text-red-700">Supprimer</button>
-            </form>
+        @endforeach
+
+        <div class="mt-6">
+            {{ $articles->links() }}
         </div>
     </div>
-@endforeach
-</div>
-
-
-
-
-
-    
 </x-app-layout>
 
