@@ -25,6 +25,8 @@ copy .env.example .env    # Windows
 php artisan key:generate
 ```
 
+> **Important :** modifiez les variables de connexion à la base de données dans le fichier `.env` (DB_CONNECTION, DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, DB_PASSWORD) avant de lancer les migrations.
+
 4) Lancer les migrations
 ```bash
 php artisan migrate
