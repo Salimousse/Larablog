@@ -35,7 +35,7 @@ public function store(Request $request)
     $article = Article::create($data);
     // $article est l'article sauvé en base de données (resultat de la méthode create ou d'un update)
     // Exemple pour ajouter des catégories à l'article en venant du formulaire
-    $article->tags ()->sync($request->input('tags'));
+    $article->tags()->sync($request->input('tags'));
     $article->categories()->sync($request->input('categories'));
 
    
@@ -49,20 +49,24 @@ public function store(Request $request)
 public function index(Request $request)
 {
     $user = Auth::user();
-        $query = Article::where('user_id', $user->id)->with(['categories','tags']);
+    $query = Article::where('user_id', $user->id)->with(['categories','tags']);
 
-        if ($request->filled('search')) {
-            $query->where('title', 'like', '%' . $request->search . '%');
-        }
-        if ($request->filled('category')) {
-            $query->whereHas('categories', function($q) use ($request) {
-                $q->where('categories.id', $request->category);
-            });
-        }
+    if ($request->filled('search')) {
+        $query->where('title', 'like', '%' . $request->search . '%');
+    }
 
-        if ($request->filled('tag')) {
-            $query->whereHas('tags', function($q) use ($request) {
-                $q->where('tags.id', $request->tag);
+    if ($request->filled('category')) {
+        $query->whereHas('categories', function($q) use ($request) {
+            $q->where('categories.id', $request->category);
+        });
+    }
+
+    if ($request->filled('tag')) {
+        $query->whereHas('tags', function($q) use ($request) {
+            $q->where('tags.id', $request->tag);
+        });
+    }
+
     $articles = $query->paginate(5);
 
     return view('dashboard', ['articles' => $articles]);
