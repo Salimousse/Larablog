@@ -23,10 +23,16 @@
             @endauth
 
             @guest
-                @if (Route::has('login'))
-                    <div class="hidden fixed top-0 right-0 px-6 py-4 sm:block">
-                        <a href="{{ route('login') }}" class="text-sm text-gray-700 underline">Login</a>
-                    </div>
+                @if (Route::has('login') || Route::has('register'))
+                    <nav class="flex items-center justify-end gap-4">
+                        @if (Route::has('login') && ! request()->routeIs('login'))
+                            <a href="{{ route('login') }}" class="inline-block px-5 py-1.5 text-[#1b1b18] dark:text-[#EDEDEC] border border-transparent hover:border-[#19140035] dark:hover:border-[#3E3E3A] rounded-sm text-sm leading-normal">Se connecter</a>
+                        @endif
+
+                        @if (Route::has('register') && ! request()->routeIs('register'))
+                            <a href="{{ route('register') }}" class="inline-block px-5 py-1.5 bg-[#1b1b18] text-white rounded-sm text-sm leading-normal hover:bg-black dark:bg-[#EDEDEC] dark:text-[#1b1b18]">S'inscrire</a>
+                        @endif
+                    </nav>
                 @endif
             @endguest
         </header>

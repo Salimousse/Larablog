@@ -8,17 +8,38 @@ use Illuminate\Foundation\Auth\User;
 
 class PublicController extends Controller
 {
-    public function index(User $user)
+    public function index(User $user, \Illuminate\Http\Request $request)
 {
-    // On récupère les articles publiés de l'utilisateur
-    $articles = Article::where('user_id', $user->id)->where('draft', 0)->get();
+    // Construire la requête de base (articles publiés de l'utilisateur)
+    $query = Article::where('user_id', $user->id)->where('draft', 0)->with(['categories','tags']);
+
+    // Filtre par recherche de titre
+    if ($request->filled('search')) {
+        $query->where('title', 'like', '%' . $request->search . '%');
+    }
+
+    // Filtre par catégorie
+    if ($request->filled('category')) {
+        $query->whereHas('categories', function($q) use ($request) {
+            $q->where('categories.id', $request->category);
+        });
+    }
+
+    // Filtre par tag
+    if ($request->filled('tag')) {
+        $query->whereHas('tags', function($q) use ($request) {
+            $q->where('tags.id', $request->tag);
+        });
+    }
+
+    $articles = $query->get();
 
     // On retourne la vue
     return view('public.index', [
         'articles' => $articles,
         'user' => $user
     ]);
-}
+} 
 
 public function show(User $user, Article $article)
 {

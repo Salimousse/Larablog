@@ -49,17 +49,20 @@ public function store(Request $request)
 public function index(Request $request)
 {
     $user = Auth::user();
-    $query = Article::where('user_id', $user->id)->with(['categories']);
+        $query = Article::where('user_id', $user->id)->with(['categories','tags']);
 
-    if ($request->filled('search')) {
-        $query->where('title', 'like', '%' . $request->search . '%');
-    }
-    if ($request->filled('category')) {
-        $query->whereHas('categories', function($q) use ($request) {
-            $q->where('categories.id', $request->category);
-        });
-    }
+        if ($request->filled('search')) {
+            $query->where('title', 'like', '%' . $request->search . '%');
+        }
+        if ($request->filled('category')) {
+            $query->whereHas('categories', function($q) use ($request) {
+                $q->where('categories.id', $request->category);
+            });
+        }
 
+        if ($request->filled('tag')) {
+            $query->whereHas('tags', function($q) use ($request) {
+                $q->where('tags.id', $request->tag);
     $articles = $query->paginate(5);
 
     return view('dashboard', ['articles' => $articles]);
